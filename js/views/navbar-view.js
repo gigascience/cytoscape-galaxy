@@ -65,7 +65,17 @@ app.NavBarView = Backbone.View.extend({
         'click #align_top': 'alignTop',
         'click #align_middle': 'alignMiddle',
         'click #align_bottom': 'alignBottom',
-        'change #my-file-selector': 'readFile'
+        'change #my-file-selector': 'readFile',
+        'click #save_png': 'savePNG'
+    },
+    savePNG: function (evt) {
+        var png64 = cyInstance.png();
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = png64;
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'workflow.png';
+        hiddenElement.click();
+
     },
     readFile: function (evt) {
         console.log("Read file!!");
