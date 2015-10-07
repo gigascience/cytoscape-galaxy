@@ -6,9 +6,6 @@
     <title>Cytoscape Galaxy workflow display</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/heroic-features.css" rel="stylesheet">
-    <!--
-    <link href="css/index.css" rel="stylesheet">
-    -->
     <link href="css/cytoscape.css" rel="stylesheet">
 
     <title>AngularJS example</title>
@@ -98,21 +95,11 @@
 
 <div id="cy"></div>
 
-<table id="people-table" ng-controller="PeopleCtrl">
-    <tbody>
-    <tr>
-        <th>Name</th>
-        <th>Weight</th>
-    </tr>
-    <tr ng-repeat="person in people">
-        <td>{{person.name}}</td>
-        <td><input type="number" min="1" ng-model="person.weight" ng-change="onWeightChange(person)"/></td>
-    </tr>
-    </tbody>
-</table>
-
+<script src="js/dagre.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+<!--<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>-->
+<script src="js/cytoscape.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js'></script>
 <script src="js/ng-flow-standalone.min.js"></script>
