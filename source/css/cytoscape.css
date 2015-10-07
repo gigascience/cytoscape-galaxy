@@ -1,0 +1,86 @@
+html {
+    height: 100%;
+}
+
+body {
+    font: 14px helvetica neue, helvetica, arial, sans-serif;
+    position: relative;
+}
+
+#app-body {
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    width: 960px;
+    height: 540px;
+    position: relative;
+    overflow: hidden;
+}
+
+#cy {
+    width: 960px;
+    height: 540px;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: auto;
+}
+
+#people-table {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background: rgba(255, 200, 200, 0.5);
+}
+
+
+th {
+    text-align: left;
+}
+
+.param {
+    margin-bottom: 1em;
+}
+
+.preamble {
+    margin-bottom: 2em;
+}
+
+p {
+    margin: 0.5em 0;
+    font-size: 0.8em;
+}
+
+.param button {
+    width: 10em;
+    margin-right: 0.25em;
+}
+
+a:hover {
+    color: #62daea;
+}
+
+.navbar-header{
+    width:100%;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
