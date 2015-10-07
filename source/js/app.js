@@ -136,54 +136,6 @@ app.factory('workflowGraph', ['$q', function ($q) {
 
 app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workflowGraph) {
 
-    var cy; // maybe you want a ref to cy
-    // (usually better to have the srv as intermediary)
-
-    $scope.nodes = [
-        {id: 'a', name: 'Select populations', color: '#D9EDF7'},
-        {id: 'b', name: 'Count', color: '#D9EDF7'},
-        {id: 'c', name: 'Filter', color: '#D9EDF7'},
-        {id: 'd', name: 'Select first', color: '#D9EDF7'},
-        {id: 'e', name: 'Remove beginning', color: '#D9EDF7'},
-        {id: 'f', name: 'Sort', color: '#D9EDF7'},
-        {id: 'g', name: 'Concatenate datasets', color: '#D9EDF7'},
-        {id: 'h', name: 'SmileFinder', color: '#D9EDF7'},
-        {id: 'i', name: 'Grapher', color: '#D9EDF7'},
-        {id: 'j', name: 'graph', color: '#FCF8E3'}
-    ];
-
-    $scope.edges = [
-        {id: 'ab', weight: 1, source: 'a', target: 'b'}, //Select populations > Count
-        {id: 'bc', weight: 2, source: 'b', target: 'c'}, //Count > Filter
-        {id: 'cd', weight: 3, source: 'c', target: 'd'}, //Filter > Select first
-        {id: 'ce', weight: 4, source: 'c', target: 'e'}, //Filter > Remove beginning
-        {id: 'ef', weight: 5, source: 'e', target: 'f'}, //Remove beginning > Sort
-        {id: 'dg', weight: 6, source: 'd', target: 'g'}, //Select First > Concatenate datasets
-        {id: 'fg', weight: 6, source: 'f', target: 'g'}, //Sort > Concatenate datasets
-        {id: 'gh', weight: 7, source: 'g', target: 'h'}, //Concatenate datasets > SmileFinder
-        {id: 'hi', weight: 8, source: 'h', target: 'i'}, //SmileFinder > Grapher
-        {id: 'ij', weight: 8, source: 'i', target: 'j'}  //Grapher > Graph
-
-    ];
-
-    // you would probably want some ui to prevent use of PeopleCtrl until cy is loaded
-    workflowGraph($scope.nodes, $scope.edges).then(function (workflowCy) {
-        cy = workflowCy;
-
-        // use this variable to hide ui until cy loaded if you want
-        $scope.cyLoaded = true;
-    });
-
-    //$scope.onWeightChange = function (person) {
-    //    workflowGraph.setPersonWeight(person.id, person.weight);
-    //};
-
-    //workflowGraph.onWeightChange(function (id, weight) {
-    //    peopleById[id].weight = weight;
-    //
-    //    $scope.$apply();
-    //});
-
     $scope.status = {
         isopen: false
     };
@@ -251,6 +203,44 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
 
     $scope.LoadExample = function () {
         console.log("LoadExample clicked!!");
+
+        var cy; // maybe you want a ref to cy
+        // (usually better to have the srv as intermediary)
+
+        $scope.nodes = [
+            {id: 'a', name: 'Select populations', color: '#D9EDF7'},
+            {id: 'b', name: 'Count', color: '#D9EDF7'},
+            {id: 'c', name: 'Filter', color: '#D9EDF7'},
+            {id: 'd', name: 'Select first', color: '#D9EDF7'},
+            {id: 'e', name: 'Remove beginning', color: '#D9EDF7'},
+            {id: 'f', name: 'Sort', color: '#D9EDF7'},
+            {id: 'g', name: 'Concatenate datasets', color: '#D9EDF7'},
+            {id: 'h', name: 'SmileFinder', color: '#D9EDF7'},
+            {id: 'i', name: 'Grapher', color: '#D9EDF7'},
+            {id: 'j', name: 'graph', color: '#FCF8E3'}
+        ];
+
+        $scope.edges = [
+            {id: 'ab', weight: 1, source: 'a', target: 'b'}, //Select populations > Count
+            {id: 'bc', weight: 2, source: 'b', target: 'c'}, //Count > Filter
+            {id: 'cd', weight: 3, source: 'c', target: 'd'}, //Filter > Select first
+            {id: 'ce', weight: 4, source: 'c', target: 'e'}, //Filter > Remove beginning
+            {id: 'ef', weight: 5, source: 'e', target: 'f'}, //Remove beginning > Sort
+            {id: 'dg', weight: 6, source: 'd', target: 'g'}, //Select First > Concatenate datasets
+            {id: 'fg', weight: 6, source: 'f', target: 'g'}, //Sort > Concatenate datasets
+            {id: 'gh', weight: 7, source: 'g', target: 'h'}, //Concatenate datasets > SmileFinder
+            {id: 'hi', weight: 8, source: 'h', target: 'i'}, //SmileFinder > Grapher
+            {id: 'ij', weight: 8, source: 'i', target: 'j'}  //Grapher > Graph
+
+        ];
+
+        // you would probably want some ui to prevent use of PeopleCtrl until cy is loaded
+        workflowGraph($scope.nodes, $scope.edges).then(function (workflowCy) {
+            cy = workflowCy;
+
+            // use this variable to hide ui until cy loaded if you want
+            $scope.cyLoaded = true;
+        });
     };
 
 }]);
