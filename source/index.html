@@ -76,7 +76,7 @@
                           action="/" method="POST" enctype="multipart/form-data">
 
                         <!-- Enable use of flow.js and add $flow variable -->
-                        <div flow-init flow-files-added="processFiles($files)">
+                        <div flow-init flow-files-added="loadGalaxyFile($files)">
                             <span class="btn btn-default" flow-btn>Select Galaxy workflow file</span>
 
                             <button type="button" class="btn btn-primary" ng-click="LoadExample()" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">

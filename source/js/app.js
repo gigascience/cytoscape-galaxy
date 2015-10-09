@@ -187,17 +187,34 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
     };
 
     $scope.imageStrings = [];
-    $scope.processFiles = function(files){
+    $scope.nodes = [];
+    $scope.edges = [];
+    $scope.loadGalaxyFile = function(files){
         angular.forEach(files, function(flowFile, i){
-            console.log(flowFile.name);
-
             var fileReader = new FileReader();
             fileReader.onload = function (event) {
-                var uri = event.target.result;
+                var contents = event.target.result;
+                var elementsJSONString = parseGalaxyWorkflow(contents);
+                // Extract out nodes and edges from elements
+                var elementsObj = JSON.parse(elementsJSONString);
+                var nodesObj = elementsObj.elements.nodes;
+                for (var x = 0; x < nodesObj.length; x++) {
+                    $scope.nodes.push(nodesObj[x].data);
+                }
+                var edgesObj = elementsObj.elements.edges;
+                for (var y = 0; y < edgesObj.length; y++) {
+                    $scope.edges.push(edgesObj[y].data);
+                }
 
-                $scope.imageStrings[i] = uri;
+                // you would probably want some ui to prevent use of PeopleCtrl until cy is loaded
+                workflowGraph($scope.nodes, $scope.edges).then(function (workflowCy) {
+                    cy = workflowCy;
+
+                    // use this variable to hide ui until cy loaded if you want
+                    $scope.cyLoaded = true;
+                });
             };
-            fileReader.readAsDataURL(flowFile.file);
+            fileReader.readAsText(flowFile.file);
         });
     };
 
@@ -235,6 +252,7 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         ];
 
         // you would probably want some ui to prevent use of PeopleCtrl until cy is loaded
+        //workflowGraph($scope.nodes, $scope.edges).then(function (workflowCy) {
         workflowGraph($scope.nodes, $scope.edges).then(function (workflowCy) {
             cy = workflowCy;
 
@@ -243,4 +261,46 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         });
     };
 
+    // Parse galaxy workflow, reading its node and edges into
+    // this CytoscapeWorkflow model.
+    function parseGalaxyWorkflow(wfJSONString) {
+        var wf_obj = JSON.parse(wfJSONString);
+        var steps = wf_obj["steps"];
+
+        var elements_contents = {};
+        var elements = {};
+
+        // Create nodes
+        var data_nodes = [];
+        var data_edges = [];
+        for (var count in steps) {
+            var node_data_contents = {};
+            node_data_contents["id"] = "n" + steps[count].id;
+            node_data_contents["name"] = steps[count].name;
+            if (steps[count].type == "data_input") {
+                node_data_contents["color"] = "#FCF8E3";
+            }
+            else { // The node is a tool
+                node_data_contents["color"] = "#D9EDF7";
+                // Create edge
+                var input_connections = steps[count].input_connections;
+                for (var input_connection_key in input_connections) {
+                    var input_connection = input_connections[input_connection_key];
+                    var edge_id = "n" + input_connection["id"] + "n" + count;
+                    var edge_data_contents = {};
+                    edge_data_contents["id"] = edge_id;
+                    edge_data_contents["weight"] = "1";
+                    edge_data_contents["source"] = "n" + input_connection["id"];
+                    edge_data_contents["target"] = "n" + count;
+                    data_edges.push({"data": edge_data_contents});
+                }
+            }
+            data_nodes.push({"data": node_data_contents});
+        }
+
+        elements_contents["nodes"] = data_nodes;
+        elements_contents["edges"] = data_edges;
+        elements["elements"] = elements_contents;
+        return JSON.stringify(elements, null, 2);
+    }
 }]);
