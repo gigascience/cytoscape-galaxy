@@ -5,9 +5,10 @@
 
 var app = angular.module('app', ['ui.bootstrap', 'flow']);
 
+var cy;
+
 // use a factory instead of a directive, because cy.js is not just for visualisation; you need access to the graph model and events etc
 app.factory('workflowGraph', ['$q', function ($q) {
-    var cy;
     var workflowGraph = function (nodes, edges) {
         var deferred = $q.defer();
 
@@ -150,8 +151,16 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         $scope.status.isopen = !$scope.status.isopen;
     };
 
+    /**
+     * Save displayed workflow as a PNG file.
+     */
     $scope.SaveAsPNG = function () {
-        console.log("Save as PNG clicked!!");
+        var png64 = cy.png();
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = png64;
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'workflow.png';
+        hiddenElement.click();
     };
 
     $scope.LayoutTB = function () {
@@ -261,8 +270,10 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         });
     };
 
-    // Parse galaxy workflow, reading its node and edges into
-    // this CytoscapeWorkflow model.
+    /**
+     * Parses a galaxy workflow file as a string into a JSON string
+     * containing the node and edge elements for a cytoscape file.
+     */
     function parseGalaxyWorkflow(wfJSONString) {
         var wf_obj = JSON.parse(wfJSONString);
         var steps = wf_obj["steps"];
