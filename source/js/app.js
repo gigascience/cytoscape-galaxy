@@ -321,8 +321,40 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(opts.layoutOpts);
     };
 
+    /**
+     * Align nodes parallel to the x-axis at the location of
+     * the node which is furthest along the top of the y-axis.
+     */
     $scope.AlignTop = function () {
         console.log("AlignRight clicked!!");
+
+        //layout.stop();
+
+        var max_y = 1000;
+        for (var i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                console.log("position y: ", selected_elements[i].position('y'));
+                if (selected_elements[i].position('y') < max_y) {
+                    max_y = selected_elements[i].position('y');
+                }
+            }
+        }
+
+        console.log("max_y: ", max_y);
+        for (i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                selected_elements[i].position('y', max_y);
+                console.log("Node: ", selected_elements[i].position());
+            }
+        }
+
+        var opts = {
+            layoutOpts: {
+                name: 'preset'
+            }
+        };
+
+        renderWorkflow(opts.layoutOpts);
     };
 
     $scope.AlignMiddle = function () {
