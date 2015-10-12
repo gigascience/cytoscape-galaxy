@@ -95,6 +95,12 @@ app.factory('workflowGraph', ['$q', function ($q) {
                 ready: function () {
                     deferred.resolve(this);
 
+                    // Detect select on nodes and edges
+                    cy.on('select', function (evt) {
+                        console.log('selected: ' + evt.cyTarget.id());
+                        selected_elements = cy.elements(':selected');
+                    });
+
                     //cy.on('cxtdrag', 'node', function (e) {
                     //    var node = this;
                     //    var dy = Math.abs(e.cyPosition.x - node.position().x);
@@ -393,13 +399,6 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
             running = true;
         }).on('layoutstop', function () {
             running = false;
-        });
-
-        // Detect select on nodes and edges
-        var selected_elements;
-        cy.on('select', function (evt) {
-            console.log('selected: ' + evt.cyTarget.id());
-            selected_elements = cy.elements(':selected');
         });
 
         cy.panningEnabled(true);
