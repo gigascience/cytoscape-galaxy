@@ -208,6 +208,10 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(params);
     };
 
+    /**
+     * Aligns selected nodes along the y-axis where the
+     * left-most node is located.
+     */
     $scope.AlignLeft = function () {
         console.log("AlignLeft clicked!!");
 
@@ -470,6 +474,9 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         });
     };
 
+    /**
+     * Loads an example workflow diagram based on the SmileFinder pipeline.
+     */
     $scope.LoadExample = function () {
         console.log("LoadExample clicked!!");
 
