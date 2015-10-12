@@ -179,8 +179,20 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(params);
     };
 
+    /**
+     * Change to Left-Right workflow layout.
+     */
     $scope.LayoutLR = function () {
         console.log("LayoutLR clicked!!");
+
+        var params = {
+            name: 'dagre',
+            directed: true,
+            roots: '#a',
+            padding: 10,
+            rankDir: 'LR'
+        };
+        renderWorkflow(params);
     };
 
     $scope.AlignLeft = function () {
