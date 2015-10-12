@@ -240,8 +240,49 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(opts.layoutOpts);
     };
 
+    /**
+     * Centre selected nodes along the y-axis.
+     */
     $scope.AlignCentre = function () {
         console.log("AlignLeft clicked!!");
+
+        //layout.stop();
+
+        var max_x = 0;
+        var min_x = 1000;
+        for (var i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                console.log("position x: ", selected_elements[i].position('x'));
+                if (selected_elements[i].position('x') > max_x) {
+                    max_x = selected_elements[i].position('x');
+                }
+                if (selected_elements[i].position('x') < min_x) {
+                    min_x = selected_elements[i].position('x');
+                }
+            }
+        }
+
+        console.log("max_x: ", max_x);
+        console.log("min_x: ", min_x);
+        var diff = (max_x - min_x) / 2;
+        var new_x = min_x + diff
+        console.log("diff: ", diff);
+        console.log("new_x: ", new_x);
+        for (i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+
+                selected_elements[i].position('x', new_x);
+                console.log("Node: ", selected_elements[i].position());
+            }
+        }
+
+        var opts = {
+            layoutOpts: {
+                name: 'preset'
+            }
+        };
+
+        renderWorkflow(opts.layoutOpts);
     };
 
     $scope.AlignRight = function () {
