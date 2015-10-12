@@ -403,8 +403,39 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(opts.layoutOpts);
     };
 
+    /**
+     * Align selected nodes parallel to the x-axis where the
+     * bottom-most node is located.
+     */
     $scope.AlignBottom = function () {
         console.log("AlignBottom clicked!!");
+
+        //layout.stop();
+
+        var min_y = 0;
+        for (var i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                console.log("position y: ", selected_elements[i].position('y'));
+                if (selected_elements[i].position('y') > min_y) {
+                    min_y = selected_elements[i].position('y');
+                }
+            }
+        }
+
+        console.log("min_y: ", min_y);
+        for (i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                selected_elements[i].position('y', min_y);
+                console.log("Node: ", selected_elements[i].position());
+            }
+        }
+
+        var opts = {
+            layoutOpts: {
+                name: 'preset'
+            }
+        };
+        renderWorkflow(opts.layoutOpts);
     };
 
     $scope.imageStrings = [];
