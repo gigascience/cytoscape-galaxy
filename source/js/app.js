@@ -357,8 +357,50 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         renderWorkflow(opts.layoutOpts);
     };
 
+    /**
+     * Align nodes parallel to the x-axis in the middle of a
+     * group of selected nodes.
+     */
     $scope.AlignMiddle = function () {
         console.log("AlignMiddle clicked!!");
+
+        //layout.stop();
+
+        var max_y = 0;
+        var min_y = 1000;
+        for (var i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                console.log("position y: ", selected_elements[i].position('y'));
+                if (selected_elements[i].position('y') > max_y) {
+                    max_y = selected_elements[i].position('y');
+                }
+                if (selected_elements[i].position('y') < min_y) {
+                    min_y = selected_elements[i].position('y');
+                }
+            }
+        }
+
+        console.log("max_y: ", max_y);
+        console.log("min_y: ", min_y);
+        var diff = (max_y - min_y) / 2;
+        var new_y = min_y + diff
+        console.log("diff: ", diff);
+        console.log("new_y: ", new_y);
+        for (i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+
+                selected_elements[i].position('y', new_y);
+                console.log("Node: ", selected_elements[i].position());
+            }
+        }
+
+        var opts = {
+            layoutOpts: {
+                name: 'preset'
+            }
+        };
+
+        renderWorkflow(opts.layoutOpts);
     };
 
     $scope.AlignBottom = function () {
