@@ -163,8 +163,20 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         hiddenElement.click();
     };
 
+    /**
+     * Change to top-bottom workflow layout.
+     */
     $scope.LayoutTB = function () {
         console.log("LayoutTB clicked!!");
+
+        var params = {
+            name: 'dagre',
+            directed: true,
+            roots: '#a',
+            padding: 10,
+            rankDir: 'TB'
+        };
+        renderWorkflow(params);
     };
 
     $scope.LayoutLR = function () {
@@ -230,7 +242,7 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
     $scope.LoadExample = function () {
         console.log("LoadExample clicked!!");
 
-        var cy; // maybe you want a ref to cy
+        //var cy; // maybe you want a ref to cy
         // (usually better to have the srv as intermediary)
 
         $scope.nodes = [
@@ -313,5 +325,46 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         elements_contents["edges"] = data_edges;
         elements["elements"] = elements_contents;
         return JSON.stringify(elements, null, 2);
+    }
+
+    /**
+     * Displays Galaxy workflow using Cytoscape.js based on parameters.
+     * @param params
+     */
+    function renderWorkflow(params) {
+
+        // Check cyInstance is not null
+        if (cy === null)
+        {
+            console.log("cy instance is undefined");
+        }
+
+        var layout = makeLayout();
+        var running = false;
+
+        cy.on('layoutstart', function () {
+            running = true;
+        }).on('layoutstop', function () {
+            running = false;
+        });
+
+        // Detect select on nodes and edges
+        //var selected_elements;
+        cy.on('select', function (evt) {
+            console.log('selected: ' + evt.cyTarget.id());
+            selected_elements = cy.elements(':selected');
+        });
+
+        cy.panningEnabled(true);
+        cy.boxSelectionEnabled(true);
+
+        layout.run();
+
+        function makeLayout(opts) {
+            for (var i in opts) {
+                params[i] = opts[i];
+            }
+            return cy.makeLayout(params);
+        }
     }
 }]);
