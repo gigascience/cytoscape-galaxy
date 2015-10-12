@@ -6,8 +6,15 @@
 var app = angular.module('app', ['ui.bootstrap', 'flow']);
 
 var cy;
+var layout = null;
+var running;
+var selected_elements;
 
-// use a factory instead of a directive, because cy.js is not just for visualisation; you need access to the graph model and events etc
+/**
+ * Use a factory instead of a directive, because cy.js is
+ * not just for visualisation; you need access to the graph
+ * model and events etc
+ */
 app.factory('workflowGraph', ['$q', function ($q) {
     var workflowGraph = function (nodes, edges) {
         var deferred = $q.defer();
@@ -197,6 +204,34 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
 
     $scope.AlignLeft = function () {
         console.log("AlignLeft clicked!!");
+
+        //layout.stop();
+
+        var min_x = 1000;
+        for (var i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                console.log("position x: ", selected_elements[i].position('x'));
+                if (selected_elements[i].position('x') < min_x) {
+                    min_x = selected_elements[i].position('x');
+                }
+            }
+        }
+
+        console.log("min_x: ", min_x);
+        for (i = 0; i < selected_elements.length; i++) {
+            if (selected_elements[i].isNode()) {
+                selected_elements[i].position('x', min_x);
+                console.log("Node: ", selected_elements[i].position());
+            }
+        }
+
+        var opts = {
+            layoutOpts: {
+                name: 'preset'
+            }
+        };
+
+        renderWorkflow(opts.layoutOpts);
     };
 
     $scope.AlignCentre = function () {
@@ -351,8 +386,8 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
             console.log("cy instance is undefined");
         }
 
-        var layout = makeLayout();
-        var running = false;
+        layout = makeLayout();
+        running = false;
 
         cy.on('layoutstart', function () {
             running = true;
@@ -361,7 +396,7 @@ app.controller('NavBarCtrl', ['$scope', 'workflowGraph', function ($scope, workf
         });
 
         // Detect select on nodes and edges
-        //var selected_elements;
+        var selected_elements;
         cy.on('select', function (evt) {
             console.log('selected: ' + evt.cyTarget.id());
             selected_elements = cy.elements(':selected');
